@@ -1788,7 +1788,6 @@ object frmACBrNFe: TfrmACBrNFe
           Height = 25
           Caption = 'Gerar Ref. Trib. 2'
           TabOrder = 15
-          OnClick = Button2Click
         end
       end
       object tsConsultas: TTabSheet

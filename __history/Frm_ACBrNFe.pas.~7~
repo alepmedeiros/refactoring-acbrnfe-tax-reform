@@ -368,7 +368,6 @@ type
     procedure btnLerArqINIClick(Sender: TObject);
     procedure btnGerarArqINIClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
-    procedure Button2Click(Sender: TObject);
   private
     { Private declarations }
     procedure GravarConfiguracao;
@@ -4803,32 +4802,6 @@ begin
   ACBrNFe1.NotasFiscais.Clear;
 
   EmitirNFCe_SP_Restaurante(vAux);
-
-  ACBrNFe1.NotasFiscais.Assinar;
-
-  ACBrNFe1.NotasFiscais.Items[0].GravarXML();
-
-  ShowMessage('Arquivo gerado em: ' + ACBrNFe1.NotasFiscais.Items[0].NomeArq);
-  MemoDados.Lines.Add('Arquivo gerado em: ' + ACBrNFe1.NotasFiscais.Items[0].NomeArq);
-
-  ACBrNFe1.NotasFiscais.Validar;
-
-  MemoResp.Lines.LoadFromFile(ACBrNFe1.NotasFiscais.Items[0].NomeArq);
-
-  LoadXML(MemoResp.Text, WBResposta);
-
-  pgRespostas.ActivePageIndex := 1;
-end;
-
-procedure TfrmACBrNFe.Button2Click(Sender: TObject);
-begin
-  var vAux := '';
-  if not(InputQuery('WebServices Enviar', 'Numero da Nota', vAux)) then
-    exit;
-
-  ACBrNFe1.NotasFiscais.Clear;
-
-  EmitirNFCe_SP_Restaurante_DoisItens(vAux);
 
   ACBrNFe1.NotasFiscais.Assinar;
 

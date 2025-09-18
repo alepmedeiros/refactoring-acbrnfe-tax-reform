@@ -294,7 +294,6 @@ type
     cbVersaoQRCode: TComboBox;
     rgReformaTributaria: TRadioGroup;
     Button1: TButton;
-    Button2: TButton;
 
     procedure FormCreate(Sender: TObject);
     procedure btnSalvarConfigClick(Sender: TObject);
@@ -368,7 +367,6 @@ type
     procedure btnLerArqINIClick(Sender: TObject);
     procedure btnGerarArqINIClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
-    procedure Button2Click(Sender: TObject);
   private
     { Private declarations }
     procedure GravarConfiguracao;
@@ -384,7 +382,6 @@ type
 
     {com reforma direto}
     procedure EmitirNFCe_SP_Restaurante(NumDFe: String);
-    procedure EmitirNFCe_SP_Restaurante_DoisItens(NumDFe: String);
   public
     { Public declarations }
   end;
@@ -4820,32 +4817,6 @@ begin
   pgRespostas.ActivePageIndex := 1;
 end;
 
-procedure TfrmACBrNFe.Button2Click(Sender: TObject);
-begin
-  var vAux := '';
-  if not(InputQuery('WebServices Enviar', 'Numero da Nota', vAux)) then
-    exit;
-
-  ACBrNFe1.NotasFiscais.Clear;
-
-  EmitirNFCe_SP_Restaurante_DoisItens(vAux);
-
-  ACBrNFe1.NotasFiscais.Assinar;
-
-  ACBrNFe1.NotasFiscais.Items[0].GravarXML();
-
-  ShowMessage('Arquivo gerado em: ' + ACBrNFe1.NotasFiscais.Items[0].NomeArq);
-  MemoDados.Lines.Add('Arquivo gerado em: ' + ACBrNFe1.NotasFiscais.Items[0].NomeArq);
-
-  ACBrNFe1.NotasFiscais.Validar;
-
-  MemoResp.Lines.LoadFromFile(ACBrNFe1.NotasFiscais.Items[0].NomeArq);
-
-  LoadXML(MemoResp.Text, WBResposta);
-
-  pgRespostas.ActivePageIndex := 1;
-end;
-
 procedure TfrmACBrNFe.cbCryptLibChange(Sender: TObject);
 begin
   try
@@ -5496,111 +5467,6 @@ begin
 
     //================ INFO ADICIONAIS ================
     InfAdic.infCpl := 'DOCUMENTO EMITIDO EM HOMOLOGACAO - SEM VALOR FISCAL';
-  end;
-
-  ACBrNFe1.NotasFiscais.GerarNFe;
-end;
-
-
-procedure TfrmACBrNFe.EmitirNFCe_SP_Restaurante_DoisItens(NumDFe: String);
-begin
-  with ACBrNFe1.NotasFiscais.Add.NFe do
-  begin
-    Ide.modelo := 65;
-    Ide.serie  := 1;
-    Ide.nNF    := StrToInt(NumDFe);
-    Ide.cNF    := GerarCodigoDFe(Ide.nNF);
-    Ide.tpAmb  := taHomologacao;
-    Ide.cUF    := 35;      // SP
-    Ide.cMunFG := 3550308; // São Paulo
-    Ide.tpImp  := tiNFCe;
-    Ide.indFinal := cfConsumidorFinal;
-    Ide.indPres  := pcPresencial;
-
-    // Emitente SN
-    Emit.CNPJCPF := '12345678000195';
-    Emit.IE      := '111111111111';
-    Emit.xNome   := 'RESTAURANTE TESTE LTDA';
-    Emit.CRT     := crtSimplesNacional;
-
-    // ITEM 1: Refeição (tributação padrão IBS/CBS)
-    with Det.New do
-    begin
-      Prod.nItem  := 1;
-      Prod.cProd  := '001';
-      Prod.xProd  := 'REFEICAO SELF-SERVICE';
-      Prod.NCM    := '21069090';
-      Prod.CFOP   := '5102';
-      Prod.qCom   := 1;
-      Prod.vUnCom := 25.00;
-      Prod.vProd  := 25.00;
-      Prod.uCom   := 'UN';
-      Prod.cEAN   := 'SEM GTIN';
-
-      with Imposto.ICMS do
-      begin
-        CSOSN := csosn102;
-        orig := oeNacional;
-      end;
-
-      with Imposto.IBSCBS do
-      begin
-        CST := cst000;
-        cClassTrib := '000001';
-        gIBSCBS.vBC  := 25.00;
-        gIBSCBS.vIBS := 1.25;
-        gIBSCBS.gCBS.pCBS := 2.00;
-        gIBSCBS.gCBS.vCBS := 0.50;
-      end;
-    end;
-
-    // ITEM 2: Bebida (monofásico CST 620)
-    with Det.New do
-    begin
-      Prod.nItem  := 2;
-      Prod.cProd  := '002';
-      Prod.xProd  := 'REFRIGERANTE LATA 350ML';
-      Prod.NCM    := '22021000';
-      Prod.CFOP   := '5102';
-      Prod.qCom   := 1;
-      Prod.vUnCom := 5.00;
-      Prod.vProd  := 5.00;
-      Prod.uCom   := 'UN';
-      Prod.cEAN   := 'SEM GTIN';
-
-      with Imposto.ICMS do
-      begin
-        CSOSN := csosn102;
-        orig := oeNacional;
-      end;
-
-      with Imposto.IBSCBS do
-      begin
-        CST := cst620;           // monofásico
-        cClassTrib := '000002';  // código de classificação tributária (monofásico)
-        gIBSCBSMono.gMonoPadrao.qBCMono := 1;
-        gIBSCBSMono.gMonoPadrao.adRemIBS := 0.20;
-        gIBSCBSMono.gMonoPadrao.adRemCBS := 0.10;
-        gIBSCBSMono.gMonoPadrao.vIBSMono := 0.20;
-        gIBSCBSMono.gMonoPadrao.vCBSMono := 0.10;
-      end;
-    end;
-
-    // TOTAIS
-    Total.ICMSTot.vProd := 30.00;
-    Total.ICMSTot.vNF   := 30.00;
-    Total.IBSCBSTot.vBCIBSCBS := 30.00;
-    Total.IBSCBSTot.gIBS.vIBS := 1.45;
-    Total.IBSCBSTot.gCBS.vCBS := 0.60;
-
-    // Pagamento
-    with pag.New do
-    begin
-      tPag := fpDinheiro;
-      vPag := 30.00;
-    end;
-
-    InfAdic.infCpl := 'DOC HOMOLOGACAO - SEM VALOR FISCAL';
   end;
 
   ACBrNFe1.NotasFiscais.GerarNFe;

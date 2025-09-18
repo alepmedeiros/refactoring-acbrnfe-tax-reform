@@ -1775,20 +1775,11 @@ object frmACBrNFe: TfrmACBrNFe
         object Button1: TButton
           Left = 376
           Top = 40
-          Width = 81
+          Width = 177
           Height = 25
-          Caption = 'Gerar Ref. Trib.'
+          Caption = 'Gerar com reforma'
           TabOrder = 14
           OnClick = Button1Click
-        end
-        object Button2: TButton
-          Left = 463
-          Top = 40
-          Width = 89
-          Height = 25
-          Caption = 'Gerar Ref. Trib. 2'
-          TabOrder = 15
-          OnClick = Button2Click
         end
       end
       object tsConsultas: TTabSheet
@@ -2072,17 +2063,18 @@ object frmACBrNFe: TfrmACBrNFe
       ActivePage = Dados
       Align = alClient
       TabOrder = 1
+      ExplicitWidth = 561
+      ExplicitHeight = 356
       object TabSheet5: TTabSheet
         Caption = 'Respostas'
         object MemoResp: TMemo
           Left = 0
           Top = 0
           Width = 559
-          Height = 312
+          Height = 345
           Align = alClient
           ScrollBars = ssVertical
           TabOrder = 0
-          ExplicitHeight = 345
         end
       end
       object TabSheet6: TTabSheet
@@ -2092,13 +2084,13 @@ object frmACBrNFe: TfrmACBrNFe
           Left = 0
           Top = 0
           Width = 559
-          Height = 312
+          Height = 345
           Align = alClient
           TabOrder = 0
           ExplicitWidth = 838
           ExplicitHeight = 517
           ControlData = {
-            4C000000842600007F1500000000000000000000000000000000000000000000
+            4C00000084260000C51700000000000000000000000000000000000000000000
             000000004C000000000000000000000001000000E0D057007335CF11AE690800
             2B2E126200000000000000004C0000000114020000000000C000000000000046
             8000000000000000000000000000000000000000000000000000000000000000
@@ -2112,11 +2104,10 @@ object frmACBrNFe: TfrmACBrNFe
           Left = 0
           Top = 0
           Width = 559
-          Height = 312
+          Height = 345
           Align = alClient
           ScrollBars = ssVertical
           TabOrder = 0
-          ExplicitHeight = 345
         end
       end
       object TabSheet9: TTabSheet
@@ -2126,11 +2117,10 @@ object frmACBrNFe: TfrmACBrNFe
           Left = 0
           Top = 0
           Width = 559
-          Height = 312
+          Height = 345
           Align = alClient
           Indent = 19
           TabOrder = 0
-          ExplicitHeight = 345
         end
       end
       object TabSheet10: TTabSheet
@@ -2140,11 +2130,10 @@ object frmACBrNFe: TfrmACBrNFe
           Left = 0
           Top = 0
           Width = 559
-          Height = 312
+          Height = 345
           Align = alClient
           ScrollBars = ssVertical
           TabOrder = 0
-          ExplicitHeight = 345
         end
       end
       object Dados: TTabSheet
@@ -2154,7 +2143,7 @@ object frmACBrNFe: TfrmACBrNFe
           Left = 0
           Top = 0
           Width = 559
-          Height = 312
+          Height = 345
           Align = alClient
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
